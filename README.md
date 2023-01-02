@@ -39,3 +39,8 @@
 ## Suports
 - pma-voice
 - TokoVOIP
+
+
+# LICENSE
+[GPL LICENSE](./LICENSE)<br />
+&copy; [MaDHouSe79](https://www.youtube.com/@MaDHouSe79)
