@@ -11,8 +11,3 @@
 ## Suports
 - pma-voice
 - TokoVOIP
-
-## Install
-- add `mh-intercom` in to `resources/[mh]/`
-- add below the [qb] `ensure [mh]` 
-- restart the server.
