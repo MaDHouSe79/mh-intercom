@@ -2,9 +2,14 @@
 --[[             MH Intercom Script by MaDHouSe            ]]--
 --[[ ===================================================== ]]--
 local QBCore = exports['qb-core']:GetCoreObject()
-local PlayerData = {}
-local canInteract = false
+local PlayerData, isLoggedIn, canInteract = {}, false, false
 
+--- Add Intercom Location
+---@param job string
+---@param customerCoords table
+---@param workerCoords table
+---@param number number
+---@param drivein boolean
 local function AddIntercomLocation(job, customerCoords, workerCoords, number, drivein)
     Config.Intercoms[#Config.Intercoms + 1] {
         job = job,
@@ -17,6 +22,8 @@ local function AddIntercomLocation(job, customerCoords, workerCoords, number, dr
 end
 exports('AddIntercomLocation', AddIntercomLocation)
 
+--- Add To Intercom
+---@param number - phone number
 local function AddToIntercom(number)
     if Config.UseTokovoip then
         exports['tokovoip_script']:addPlayerToRadio(number, Lang:t('info.phone'))
@@ -25,6 +32,8 @@ local function AddToIntercom(number)
     end
 end
 
+--- Remove From Intercom
+---@param number - phone number
 local function RemoveFromIntercom(number)
     if Config.UseTokovoip then
         exports['tokovoip_script']:removePlayerFromRadio(number)
@@ -36,80 +45,76 @@ end
 AddEventHandler('onResourceStart', function(resourceName)
     if GetCurrentResourceName() == resourceName then
         PlayerData = QBCore.Functions.GetPlayerData()
+        isLoggedIn = true
+    end
+end)
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if GetCurrentResourceName() == resourceName then
+        PlayerData = {}
+        isLoggedIn = false
     end
 end)
 
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
     PlayerData = QBCore.Functions.GetPlayerData()
+    isLoggedIn = true
+end)
+
+RegisterNetEvent("QBCore:Client:OnJobUpdate", function(job)
+    PlayerData.job = job
 end)
 
 RegisterNetEvent('QBCore:Player:SetPlayerData', function(data)
     PlayerData = data
 end)
 
-RegisterNetEvent('mh-intercom:client:callintercom')
-AddEventHandler('mh-intercom:client:callintercom', function(job)
-    local audioName, audioRef, notify
-    local found = false
+RegisterNetEvent('mh-intercom:client:callintercom', function(job)
+    local audioName, audioRef, notify, found = nil, nil, nil, false
     for k, v in pairs(Config.Intercoms) do
         if v.job == job and PlayerData.job.name == job and PlayerData.job.onduty then
-            notify = v.call_message
-            audioName = v.audioName
-            audioRef = v.audioRef
-            found = true
+            QBCore.Functions.Notify(Lang:t('call_info.all'), 10000)
+            PlaySoundFrontend(-1, "Beep_Green", "DLC_HEIST_HACKING_SNAKE_SOUNDS", 1) 
+            break
         end
-    end
-    if found then
-        QBCore.Functions.Notify(notify, 10000)
-        PlaySoundFrontend(-1, audioName, audioRef, 1)
     end
 end)
 
 CreateThread(function()
     while true do
-        Wait(4)
-        if LocalPlayer.state.isLoggedIn then
+        if isLoggedIn then
+            local ped = PlayerPedId()
+            local playerCoords = GetEntityCoords(ped)
             local nearIntercom = false
-            local playerCoords = GetEntityCoords(PlayerPedId())
-            for k, v in pairs(Config.Intercoms) do
-                if PlayerData.job.name == v.job and PlayerData.job.onduty then
-                    local distance = #(playerCoords - v.worker)
-                    if distance < 2.0 then
-                        nearIntercom = true
-                        if not canInteract then
-                            canInteract = true
-                            exports['qb-core']:DrawText(Lang:t('info.worker'))
-                            AddToIntercom(v.number)
-                        end
-                    end
-                end
-                local distance = #(playerCoords - v.customer)
-                if distance < 3.0 then
-                    nearIntercom = true
-                    if not canInteract then
-                        canInteract = true
-                        if v.drivein then
-                            if IsPedInAnyVehicle(PlayerPedId()) then
-                                TriggerServerEvent('mh-intercom:server:alertworkers', v.job)
-                                exports['qb-core']:DrawText(Lang:t('info.customer'))
-                                AddToIntercom(v.number)
-                            end
-                        else
-                            TriggerServerEvent('mh-intercom:server:alertworkers', v.job)
-                            exports['qb-core']:DrawText(Lang:t('info.customer'))
-                            AddToIntercom(v.number)
-                        end
-                    end
-                end
-                if not nearIntercom then
+
+            for k, intercom in pairs(Config.Intercoms) do
+                if PlayerData.job.name == intercom.job then -- check if player has the job.
+                    if #(playerCoords - intercom.worker) < 2.5 then nearIntercom = true end
+                    if not canInteract and nearIntercom and PlayerData.job.onduty then canInteract = true end
                     if canInteract then
-                        canInteract = false
-                        exports['qb-core']:HideText()
-                        RemoveFromIntercom(v.number)
+                        exports['qb-core']:DrawText(Lang:t('info.worker'))
+                        AddToIntercom(intercom.number)
                     end
-                    Wait(1000)
+                elseif PlayerData.job.name ~= intercom.job then -- check if player is a customer.
+                    if #(playerCoords - intercom.customer) < 2.5 then nearIntercom = true end
+                    if not canInteract and nearIntercom then canInteract = true end
+                    if canInteract then
+                        if intercom.drivein and IsPedInAnyVehicle(ped) then 
+                            TriggerServerEvent('mh-intercom:server:alertworkers', intercom.job)
+                            exports['qb-core']:DrawText(Lang:t('info.customer'))
+                            AddToIntercom(intercom.number)
+                        end
+                    end
                 end
             end
+
+            if not nearIntercom and canInteract then
+                canInteract = false
+                RemoveFromIntercom(intercom.number)
+                exports['qb-core']:HideText()
+            end
+            
         end
+        Wait(5)
     end
 end)
