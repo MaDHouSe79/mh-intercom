@@ -6,6 +6,18 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = {}
 local canInteract = false
 
+local function AddIntercomLocation(job, customerCoords, workerCoords, number, drivein)
+    Config.Intercoms[#Config.Intercoms + 1] {
+        job = job,
+        intercom = job:gsub("^%l", job.upper),
+        worker = workerCoords,
+        customer = customerCoords,
+        number = number,
+        drivein = false
+    }
+end
+exports('AddIntercomLocation', AddIntercomLocation)
+
 local function AddToIntercom(number)
     if Config.UseTokovoip then
         exports['tokovoip_script']:addPlayerToRadio(number, Lang:t('info.phone'))
