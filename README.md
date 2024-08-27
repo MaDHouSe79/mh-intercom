@@ -31,7 +31,6 @@
 - Add intercoms in your world for drivein at the mac or burgershot.
 - or you can use it in the police HQ as intercom.
 
-
 ## Dependencies:
 - [qb-core](https://github.com/qbcore-framework/qb-core) (Required)
 - [pma-voice](https://github.com/AvarianKnight/pma-voice) (Required)
@@ -40,6 +39,21 @@
 - pma-voice
 - TokoVOIP
 
+# Exports Example
+```lua
+-- job 
+local job = 'ambulance'
+-- curtimer location
+local customerCoords = vector3(0.0, 0.0, 0.0)
+-- worker location
+local workerCoords = vector3(0.0, 0.0, 0.0)
+-- must by a unique number
+local number = 123456
+-- is this a drive in
+local drivein = false
+-- Add Intercom Location 
+exports['mh-intercom']:AddIntercomLocation(job, customerCoords, workerCoords, number, drivein)
+```
 
 # LICENSE
 [GPL LICENSE](./LICENSE)<br />
