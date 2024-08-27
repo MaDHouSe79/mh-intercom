@@ -1,7 +1,6 @@
 --[[ ===================================================== ]]--
 --[[             MH Intercom Script by MaDHouSe            ]]--
 --[[ ===================================================== ]]--
-
 local QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = {}
 local canInteract = false
