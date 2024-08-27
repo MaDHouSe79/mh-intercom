@@ -41,18 +41,12 @@
 
 # Exports Example
 ```lua
--- job 
-local job = 'ambulance'
--- curtimer location
-local customerCoords = vector3(0.0, 0.0, 0.0)
--- worker location
-local workerCoords = vector3(0.0, 0.0, 0.0)
--- must by a unique number
-local number = 123456
--- is this a drive in
-local drivein = false
--- Add Intercom Location 
-exports['mh-intercom']:AddIntercomLocation(job, customerCoords, workerCoords, number, drivein)
+local job = 'ambulance'                       -- job 
+local customerCoords = vector3(0.0, 0.0, 0.0) -- curtimer location
+local workerCoords = vector3(0.0, 0.0, 0.0)   -- worker location
+local number = 123456                         -- must by a unique number
+local drivein = false                         -- is this a drive in
+exports['mh-intercom']:AddIntercomLocation(job, customerCoords, workerCoords, number, drivein) -- Add Intercom Location 
 ```
 
 # LICENSE
