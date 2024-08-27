@@ -9,7 +9,7 @@ local canInteract = false
 local function AddIntercomLocation(job, customerCoords, workerCoords, number, drivein)
     Config.Intercoms[#Config.Intercoms + 1] {
         job = job,
-        intercom = job:gsub("^%l", job.upper),
+        intercom = job:gsub("^%l", string.upper),
         worker = workerCoords,
         customer = customerCoords,
         number = number,
