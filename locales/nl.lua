@@ -4,8 +4,7 @@
 
 local Translations = {
     call_info = {
-        ['police'] = "Er is iemand bij de balie-intercom",
-        ['burgershot'] = "Er staat iemand bij de intercom",
+        ['all'] = "Er staat iemand bij de intercom",
     },
     info = {
         ['phone'] = "Telefoon",
