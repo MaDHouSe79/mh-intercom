@@ -4,51 +4,6 @@
     <h3 align="center">A passionate allround developer </h3>    
 </p>
 
-<p align="center">
-  <a href="https://github.com/MaDHouSe79/mh-intercom/issues">
-    <img src="https://img.shields.io/github/issues/MaDHouSe79/mh-intercom"/> 
-  </a>
-  <a href="https://github.com/MaDHouSe79/mh-intercom/watchers">
-    <img src="https://img.shields.io/github/watchers/MaDHouSe79/mh-intercom"/> 
-  </a> 
-  <a href="https://github.com/MaDHouSe79/mh-intercom/network/members">
-    <img src="https://img.shields.io/github/forks/MaDHouSe79/mh-intercom"/> 
-  </a>  
-  <a href="https://github.com/MaDHouSe79/mh-intercom/stargazers">
-    <img src="https://img.shields.io/github/stars/MaDHouSe79/mh-intercom?color=white"/> 
-  </a>
-  <a href="https://github.com/MaDHouSe79/mh-intercom/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/MaDHouSe79/mh-intercom?color=black"/> 
-  </a>      
-</p>
-
-<p align="center">
-  <img alig src="https://github-profile-trophy.vercel.app/?username=MaDHouSe79&margin-w=15&column=6" />
-</p>
-
-# MH-Intercom
-- The best intercom script for fivem.
-- Add intercoms in your world for drivein at the mac or burgershot.
-- or you can use it in the police HQ as intercom.
-
-## Dependencies:
-- [qb-core](https://github.com/qbcore-framework/qb-core) (Required)
-- [pma-voice](https://github.com/AvarianKnight/pma-voice) (Required)
-
-## Suports
-- pma-voice
-- TokoVOIP
-
-# Exports Example
-```lua
-local job = 'ambulance'                       -- job 
-local customerCoords = vector3(0.0, 0.0, 0.0) -- curtimer location
-local workerCoords = vector3(0.0, 0.0, 0.0)   -- worker location
-local number = 123456                         -- must by a unique number
-local drivein = false                         -- is this a drive in
-exports['mh-intercom']:AddIntercomLocation(job, customerCoords, workerCoords, number, drivein) -- Add Intercom Location 
-```
-
-# LICENSE
-[GPL LICENSE](./LICENSE)<br />
-&copy; [MaDHouSe79](https://www.youtube.com/@MaDHouSe79)
+# MH Intercom
+- Download: https://github.com/MH-Scripts
+- Youtube: https://www.youtube.com/@MaDHouSe79
